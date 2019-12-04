@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container" id="todo">
+      <p>残todo{{ remaining.length }}</p>
+      <section class="panel">
+        <input v-model="inputData" type="text" class="text-input" />
+        <button v-on:click="addTodo">追加</button>
+      </section>
+      <ul>
+        <compo
+          v-for="(todo, index) in todoList"
+          :text="todo.text"
+          :index="index"
+          @click-remove-button="removeTodo"
+          @click-done-button="done"
+        ></compo>
+      </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="todo.js"></script>
+  </body>
+</html>
