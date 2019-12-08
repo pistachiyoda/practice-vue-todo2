@@ -82,7 +82,8 @@
                 </select>
               </form>
             </td>
-            <td>{{ todo.date }}</td>
+            <td><input type="date" v-model="todo.date" /></td>
+            <!-- <td>{{ todo.date }}</td> -->
             <td>
               <button @click="removeTodo(todo.id)">
                 削除
