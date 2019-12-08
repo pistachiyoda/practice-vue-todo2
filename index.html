@@ -9,21 +9,88 @@
   </head>
 
   <body>
+    <h1>複数人タスク管理アプリ</h1>
     <div class="container" id="todo">
-      <p>残todo{{ remaining.length }}</p>
+      <h2>タスクの追加</h2>
       <section class="panel">
-        <input v-model="inputData" type="text" class="text-input" />
-        <button v-on:click="addTodo">追加</button>
+        <label>タスク名<input type="text" v-model="inputTask"/></label>
+        <label>担当者<input type="text" v-model="inputName"/></label>
+        <label>期日<input type="date" v-model="inputDate"/></label>
+        <button @click="addTodo">追加</button>
       </section>
-      <ul>
-        <compo
-          v-for="(todo, index) in todoList"
-          :text="todo.text"
-          :index="index"
-          @click-remove-button="removeTodo"
-          @click-done-button="done"
-        ></compo>
-      </ul>
+      <h2>タスク一覧</h2>
+      <label
+        >担当者
+        <form>
+          <select v-model="selectedName">
+            <option>すべて</option>
+            <option v-for="name in nameList" :name="name">
+              {{ name }}
+            </option>
+          </select>
+        </form></label
+      >
+      <label
+        >ステータス
+        <form>
+          <select v-model="selectedStatus">
+            <option>すべて</option>
+            <option v-for="status in statusList" :name="status">
+              {{ status }}
+            </option>
+          </select>
+        </form></label
+      >
+      <span>残タスク{{ remaining.length }}件/全{{ totalTask.length }}件</span>
+
+      <button @click="removeDoneTodo">
+        Doneタスクを削除する
+      </button>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ステータス</th>
+            <th>タスク名</th>
+            <th>担当</th>
+            <th>期限</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(todo, index) in todoList"
+            v-if="(todo.name === selectedName || selectedName === 'すべて') && (todo.status === selectedStatus || selectedStatus == 'すべて')"
+          >
+            <td>{{ todo.id }}</td>
+            <td>
+              <form>
+                <select v-model="todo.status">
+                  <option v-for="status in statusList">
+                    {{ status }}
+                  </option>
+                </select>
+              </form>
+            </td>
+            <td>{{ todo.task }}</td>
+            <td>
+              <form>
+                <select v-model="todo.name">
+                  <option v-for="name in nameList">
+                    {{ name }}
+                  </option>
+                </select>
+              </form>
+            </td>
+            <td>{{ todo.date }}</td>
+            <td>
+              <button @click="removeTodo(todo.id)">
+                削除
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="todo.js"></script>

@@ -1,39 +1,60 @@
-//Create a new Vue instance
 let todo = new Vue({
   el: "#todo",
   data: {
-    inputData: "",
+    currentId: 0,
+    inputTask: "",
+    inputName: "",
+    inputDate: "",
     isDone: "",
-    todoList: []
+    selectedName: "すべて",
+    selectedStatus: "すべて",
+    todoList: [],
+    nameList: [],
+    statusList: ["TODO", "IN PROGRESS", "DONE"]
   },
   methods: {
     addTodo: function() {
-      this.todoList.push({ text: this.inputData, isDone: false });
+      this.currentId++,
+        this.todoList.push({
+          id: this.currentId,
+          task: this.inputTask,
+          name: this.inputName,
+          date: this.inputDate,
+          status: "TODO"
+        });
+      let val = this.nameList.filter(name => name === this.inputName);
+      if (val.length === 0) {
+        this.nameList.push(this.inputName);
+      }
     },
-    removeTodo: function(index) {
-      this.todoList.splice(index, 1);
+    removeTodo: function(id) {
+      this.todoList = this.todoList.filter(todo => todo.id !== id);
     },
     done: function(index) {
       this.todoList[index].isDone = !this.todoList[index].isDone;
+    },
+    removeDoneTodo: function() {
+      const doneTodoConfirmation = confirm(
+        "ステータスが”DONE”のタスクを一括削除します"
+      );
+      if (doneTodoConfirmation) {
+        this.todoList = this.todoList.filter(todo => todo.status !== "DONE");
+      }
     }
   },
   computed: {
+    totalTask: function() {
+      return this.todoList;
+    },
     remaining: function() {
-      return this.todoList.filter(todo => todo.isDone === false);
+      return this.todoList.filter(todo => todo.status !== "DONE");
+    },
+    selectedRemaining: function(selectedName) {
+      return (
+        this.todoList
+          // .filter(todo => todo.isDone === false)
+          .filter(todo => todo.name === "test")
+      );
     }
   }
-});
-Vue.component("compo", {
-  props: ["text", "index"],
-  //テンプレートの中ではthisがいらない
-  methods: {
-    clickRemoveButton() {
-      this.$emit("click-remove-button", this.index);
-    },
-    clickDoneButton() {
-      this.$emit("click-done-button", this.index);
-    }
-  },
-  template:
-    '<li><input type="checkbox" @change="clickDoneButton"  class="checkbox" /><label for="checkbox"></label>{{ text }}<button v-on:click="clickRemoveButton" class="delete">X</button></li>'
 });
